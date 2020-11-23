@@ -1,0 +1,22 @@
+version: "3.5"
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: "calendario"
+      POSTGRES_USER: "calendario_user"
+      POSTGRES_PASSWORD: "calendario_password"
+
+  calendario:
+    container_name: calendario
+    build:
+      context: .
+      dockerfile: backend.dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    stop_signal: SIGINT
+    command: ["python", "run.py"]
