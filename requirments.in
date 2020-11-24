@@ -1,3 +1,6 @@
+alembic
 fastapi
-uvicorn
+psycopg2
 pydantic[email]
+sqlalchemy
+uvicorn

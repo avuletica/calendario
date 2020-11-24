@@ -5,11 +5,11 @@ from config import settings
 
 def init():
     uvicorn.run(
-        "calendario.main:app",
+        "main:application",
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG,
-        reload_dirs=["calendario"],
+        reload_dirs=["api"],
     )
 
 
