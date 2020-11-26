@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 
 from core.security import get_password_hash, verify_password
 from crud.base import CRUDBase
-from models.user import User
-from schemas.user import UserCreate
+from models import User
+from schemas import UserCreate
 
 
 class CRUDUser(CRUDBase[User, UserCreate]):

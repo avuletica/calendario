@@ -14,6 +14,10 @@ For first time setup we must run migrations:
   $ alembic upgrade head
 ```
 
+generate a new revision
+```
+$ alembic revision --autogenerate -m "revision message"`
+```
 downgrade last revision
 ```
 $ alembic downgrade -1
