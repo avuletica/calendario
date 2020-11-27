@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 
@@ -10,7 +12,7 @@ from schemas.apartment import ApartmentCreate, Apartment
 router = APIRouter()
 
 
-@router.post("/apartment", response_model=schemas.Apartment)
+@router.post("", response_model=schemas.Apartment)
 def create_apartment(
     *,
     current_user: models.User = Depends(deps.get_current_active_user),
@@ -27,3 +29,17 @@ def create_apartment(
         )
     apartment = crud.apartment.create(db, obj_in=apartment_in)
     return apartment
+
+
+@router.get("", response_model=List[schemas.Apartment])
+def list_apartments(
+    *,
+    current_user: models.User = Depends(deps.get_current_active_user),
+    offset: int = 0,
+    limit: int = 100,
+    db: Session = Depends(deps.get_db)
+) -> Apartment:
+    apartments = crud.apartment.get_multi_by_owner(
+        db=db, owner_id=current_user.id, offset=offset, limit=limit
+    )
+    return apartments

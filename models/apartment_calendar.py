@@ -9,7 +9,7 @@ class ApartmentCalendar(Base):
 
     id = Column(Integer, primary_key=True)
     summary = Column(String(128))
-    start_datetime = Column(DateTime,  nullable=False)
-    end_datetime = Column(DateTime,  nullable=False)
-    ics_file = Column(JSONB,  nullable=False)
+    start_datetime = Column(DateTime, nullable=False)
+    end_datetime = Column(DateTime, nullable=False)
+    ics_file = Column(JSONB, nullable=False)
     apartment_id = Column(Integer, ForeignKey("apartment.id"))

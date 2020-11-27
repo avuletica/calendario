@@ -13,11 +13,12 @@ router = APIRouter()
 
 @router.post("/import", status_code=204)
 async def calendar_import(
-        db: Session = Depends(deps.get_db),
-        current_user: models.User = Depends(deps.get_current_active_user),
-        file: UploadFile = File(...),
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+    file: UploadFile = File(...),
 ) -> Any:
-    gcal = Calendar.from_ical(await file.read())
+    file_ = await file.read()
+    gcal = Calendar.from_ical(file_)
     apartment_calendar = {}
     for component in gcal.walk():
         if component.name == "VEVENT":
@@ -35,7 +36,7 @@ async def calendar_import(
         )
 
     apartment_calendar["apartment_id"] = apartment.id
-    apartment_calendar["ics_file"] = await file.read()
+    apartment_calendar["ics_file"] = file_
     crud.apartment_calendar.create(db, apartment_calendar)
 
     return None, 204

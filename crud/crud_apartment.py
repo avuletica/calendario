@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy.orm import Session
 
@@ -8,14 +8,24 @@ from schemas import ApartmentCreate
 
 
 class CRUDApartment(CRUDBase[Apartment, ApartmentCreate]):
-    @staticmethod
     def get_by_name(
-        db: Session, owner_id: int, apartment_name: str
+        self, db: Session, owner_id: int, apartment_name: str
     ) -> Optional[Apartment]:
         return (
-            db.query(Apartment)
+            db.query(self.model)
             .filter(Apartment.owner_id == owner_id, Apartment.name == apartment_name)
             .first()
+        )
+
+    def get_multi_by_owner(
+        self, db: Session, *, owner_id: int, offset: int = 0, limit: int = 100
+    ) -> List[Apartment]:
+        return (
+            db.query(self.model)
+            .filter(Apartment.owner_id == owner_id)
+            .offset(offset)
+            .limit(limit)
+            .all()
         )
 
     def create(self, db: Session, *, obj_in: ApartmentCreate) -> Apartment:

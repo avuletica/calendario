@@ -27,4 +27,4 @@ services:
     stop_signal: SIGINT
     environment:
       DEBUG: "1"
-    command: ["python", "run.py"]
+    command: ["./wait-for-postgres.sh", "db", "python", "run.py"]
