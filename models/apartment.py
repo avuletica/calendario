@@ -5,7 +5,9 @@ from db.base_class import Base
 
 
 class Apartment(Base):
-    __table_args__ = (UniqueConstraint("id", "name", name="unique_id_name"),)
+    __table_args__ = (
+        UniqueConstraint("owner_id", "name", name="unique_owner_id_name"),
+    )
 
     id = Column(Integer, primary_key=True)
     name = Column(String(128))

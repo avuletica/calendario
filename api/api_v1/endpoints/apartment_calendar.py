@@ -18,7 +18,7 @@ from starlette.responses import StreamingResponse
 import crud
 import models
 from api import deps
-from schemas import ApartmentCalendarCreate
+from schemas import ApartmentCalendarCreate, ApartmentCalendarEntryCreate
 
 router = APIRouter()
 
@@ -44,8 +44,14 @@ def calendar_import_handler(db, current_user, calendar):
         )
 
     calendar.pop("apartment_name", None)
-    obj_in = ApartmentCalendarCreate(**calendar)
-    crud.apartment_calendar.create(db=db, obj_in=obj_in)
+    entries = calendar.pop("entries")
+    apartment_calendar_in = ApartmentCalendarCreate(**calendar)
+    apartment_calendar = crud.apartment_calendar.create(db=db, obj_in=apartment_calendar_in)
+
+    for entry in entries:
+        entry["apartment_calendar_id"] = apartment_calendar.id
+        apartment_calendar_entry_in = ApartmentCalendarEntryCreate(**entry)
+        crud.apartment_calendar_entry.create(db=db, obj_in=apartment_calendar_entry_in)
 
 
 @router.post("/import", status_code=HTTPStatus.NO_CONTENT)
@@ -80,7 +86,9 @@ async def calendar_import_from_url(
     current_user: models.User = Depends(deps.get_current_active_user),
     url: AnyHttpUrl,
 ) -> Any:
-    calendar_from_url = await crud.apartment_calendar.fetch_icalendar_from_url(url)
+    calendar_from_url = await crud.apartment_calendar.fetch_icalendar_from_url(
+        url
+    )
     calendar = crud.apartment_calendar.parse_icalendar(calendar_from_url)
     calendar["import_url"] = url
     calendar_import_handler(db, current_user, calendar)
@@ -120,7 +128,7 @@ async def calendar_export(
             detail="Forbidden.",
         )
 
-    output = io.BytesIO(calendar.ics_file)
+    output = io.BytesIO(calendar.file)
     headers = {
         "Content-Disposition": f"attachment; filename=export_{calendar.id}.ics",
         "Content-Type": "text/calendar",

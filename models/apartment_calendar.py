@@ -2,11 +2,11 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
-    DateTime,
-    ForeignKey,
     LargeBinary,
+    ForeignKey,
     UniqueConstraint,
 )
+from sqlalchemy.orm import relationship
 
 from db.base_class import Base
 
@@ -16,9 +16,9 @@ class ApartmentCalendar(Base):
     __table_args__ = (UniqueConstraint("apartment_id", name="unique_apartment_id"),)
 
     id = Column(Integer, primary_key=True)
-    summary = Column(String(128))
-    start_datetime = Column(DateTime, nullable=False)
-    end_datetime = Column(DateTime, nullable=False)
-    ics_file = Column(LargeBinary, nullable=False)
-    apartment_id = Column(Integer, ForeignKey("apartment.id"))
+    file = Column(LargeBinary, nullable=False)
     import_url = Column(String)
+    apartment_id = Column(Integer, ForeignKey("apartment.id"))
+
+    # Relationship (one-to-many) #
+    entries = relationship("ApartmentCalendarEntry", backref="calendar")

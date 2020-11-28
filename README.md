@@ -24,6 +24,9 @@ For first time setup we must run migrations (we can also add initial data for te
   $ python init_data.py
 ```
 
+### Database diagram
+
+
 #### Helpful alembic commands
 generate a new revision
 ```

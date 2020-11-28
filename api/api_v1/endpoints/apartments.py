@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
@@ -38,7 +38,7 @@ def list_apartments(
     offset: int = 0,
     limit: int = 100,
     db: Session = Depends(deps.get_db)
-) -> Apartment:
+) -> Any:
     apartments = crud.apartment.get_multi_by_owner(
         db=db, owner_id=current_user.id, offset=offset, limit=limit
     )
