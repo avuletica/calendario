@@ -1,3 +1,3 @@
-from .crud_apartment import apartment
-from .crud_apartment_calendar import apartment_calendar
-from .crud_user import user
+from .apartment import apartment
+from .apartment_calendar import apartment_calendar
+from .user import user

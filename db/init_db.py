@@ -13,7 +13,6 @@ def init_db(db: Session) -> None:
     user = crud.user.get_by_email(db, email="john@doe.com")
     if not user:
         user_in = schemas.UserCreate(
-            full_name="John Doe",
             email="john@doe.com",
             password="password",
         )

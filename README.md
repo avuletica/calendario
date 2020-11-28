@@ -1,5 +1,14 @@
 # Introduction
-TODO
+Purpose to create example of FastAPI architecture with:
+ - JWT authorization
+ - Alembic integration
+ - building images with docker
+ - utilisation of docker-compose for handling multiple docker services
+ - celery worker for handling intensive background tasks
+ - testing
+ 
+This was done with a task to parse, store .ics files and .. todo...
+
 
 ## Installation
 
@@ -23,4 +32,11 @@ $ alembic revision --autogenerate -m "revision message"`
 downgrade last revision
 ```
 $ alembic downgrade -1
+```
+
+### Testing
+
+To get fresh docker container (no volume data)
+```
+    $ docker rm -f -v calendario_pg_db
 ```
