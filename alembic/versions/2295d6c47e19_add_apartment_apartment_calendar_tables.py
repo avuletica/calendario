@@ -7,7 +7,7 @@ Create Date: 2020-11-26 19:51:24.443764
 """
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
+
 
 # revision identifiers, used by Alembic.
 revision = '2295d6c47e19'
@@ -31,10 +31,11 @@ def upgrade():
     sa.Column('summary', sa.String(length=128), nullable=True),
     sa.Column('start_datetime', sa.DateTime(), nullable=False),
     sa.Column('end_datetime', sa.DateTime(), nullable=False),
-    sa.Column('ics_file', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+    sa.Column('ics_file', sa.LargeBinary(), nullable=False),
     sa.Column('apartment_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['apartment_id'], ['apartment.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('apartment_id', name='unique_apartment_id')
     )
     # ### end Alembic commands ###
 

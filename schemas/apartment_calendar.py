@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, BinaryIO
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -9,7 +9,7 @@ class ApartmentCalendarBase(BaseModel):
     summary: str
     start_datetime: datetime
     end_datetime: datetime
-    ics_file: BinaryIO
+    ics_file: bytes
     apartment_id: int
 
     class Config:

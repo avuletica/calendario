@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.orm import Session
 
 from crud.base import CRUDBase
@@ -6,6 +8,15 @@ from schemas import ApartmentCalendarCreate
 
 
 class CRUDApartmentCalendar(CRUDBase[ApartmentCalendar, ApartmentCalendarCreate]):
+    def get_by_apartment_id(
+        self, db: Session, apartment_id: int
+    ) -> Optional[ApartmentCalendar]:
+        return (
+            db.query(self.model)
+            .filter(ApartmentCalendar.apartment_id == apartment_id)
+            .first()
+        )
+
     def create(
         self, db: Session, *, obj_in: ApartmentCalendarCreate
     ) -> ApartmentCalendar:
