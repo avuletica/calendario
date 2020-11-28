@@ -25,7 +25,7 @@ For first time setup we must run migrations (we can also add initial data for te
 ```
 
 ### Database diagram
-
+<img src="https://github.com/avuletica/calendario/blob/master/static/calendario_db_diagram.png" width="1000" height="300">
 
 #### Helpful alembic commands
 generate a new revision
