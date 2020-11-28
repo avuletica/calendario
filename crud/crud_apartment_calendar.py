@@ -1,5 +1,7 @@
+from datetime import datetime, date
 from typing import Optional
 
+from icalendar import Calendar
 from sqlalchemy.orm import Session
 
 from crud.base import CRUDBase
@@ -31,6 +33,28 @@ class CRUDApartmentCalendar(CRUDBase[ApartmentCalendar, ApartmentCalendarCreate]
         db.commit()
         db.refresh(db_obj)
         return db_obj
+
+    @staticmethod
+    def parse_icalendar(file: bytes):
+        calendar = Calendar.from_ical(file)
+        ret_val = {"ics_file": file}
+
+        for component in calendar.walk():
+            if component.name == "VEVENT":
+                ret_val["summary"] = component.get("summary")
+                ret_val["start_datetime"] = component.get("dtstart").dt
+                ret_val["end_datetime"] = component.get("dtend").dt
+                if isinstance(ret_val["start_datetime"], date):
+                    ret_val["start_datetime"] = datetime.combine(
+                        ret_val["start_datetime"], datetime.min.time()
+                    )
+                if isinstance(ret_val["end_datetime"], date):
+                    ret_val["end_datetime"] = datetime.combine(
+                        ret_val["end_datetime"], datetime.min.time()
+                    )
+
+        ret_val["apartment_name"] = calendar.get("PRODID")
+        return ret_val
 
 
 apartment_calendar = CRUDApartmentCalendar(ApartmentCalendar)
