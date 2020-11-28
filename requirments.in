@@ -1,5 +1,8 @@
+aiofiles
+aiohttp
 alembic
 fastapi
+icalendar
 passlib
 psycopg2
 pydantic[email]
@@ -7,4 +10,3 @@ python-jose[cryptography]
 python-multipart
 sqlalchemy
 uvicorn
-icalendar

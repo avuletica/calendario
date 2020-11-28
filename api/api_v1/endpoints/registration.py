@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 
@@ -5,13 +7,13 @@ import crud
 import schemas
 from api import deps
 from config import settings
-from schemas.user import UserCreate, User
+from schemas.user import UserCreate
 
 router = APIRouter()
 
 
 @router.post("/registration", response_model=schemas.User)
-def registration(user_in: UserCreate, db: Session = Depends(deps.get_db)) -> User:
+def registration(user_in: UserCreate, db: Session = Depends(deps.get_db)) -> Any:
     user = crud.user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(

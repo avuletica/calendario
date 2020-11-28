@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, AnyHttpUrl
 
 
 # Shared properties
@@ -11,6 +11,7 @@ class ApartmentCalendarBase(BaseModel):
     end_datetime: datetime
     ics_file: bytes
     apartment_id: int
+    import_url: Optional[AnyHttpUrl]
 
     class Config:
         arbitrary_types_allowed = True

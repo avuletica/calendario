@@ -19,7 +19,7 @@ def init_db(db: Session) -> None:
         )
         user = crud.user.create(db, obj_in=user_in)
 
-    apartment_name = "apartment 1"
+    apartment_name = "apartment_1"
     apartment_1 = crud.apartment.get_by_name(
         db, owner_id=user.id, apartment_name=apartment_name
     )
@@ -30,7 +30,7 @@ def init_db(db: Session) -> None:
         )
         crud.apartment.create(db, obj_in=apartment_1)
 
-    apartment_name = "apartment 2"
+    apartment_name = "apartment_2"
     apartment_2 = crud.apartment.get_by_name(
         db, owner_id=user.id, apartment_name=apartment_name
     )

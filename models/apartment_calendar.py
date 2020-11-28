@@ -21,3 +21,4 @@ class ApartmentCalendar(Base):
     end_datetime = Column(DateTime, nullable=False)
     ics_file = Column(LargeBinary, nullable=False)
     apartment_id = Column(Integer, ForeignKey("apartment.id"))
+    import_url = Column(String)

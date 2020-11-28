@@ -38,6 +38,7 @@ def upgrade():
         sa.Column("end_datetime", sa.DateTime(), nullable=False),
         sa.Column("ics_file", sa.LargeBinary(), nullable=False),
         sa.Column("apartment_id", sa.Integer(), nullable=True),
+        sa.Column("import_url", sa.String(), nullable=True),
         sa.ForeignKeyConstraint(
             ["apartment_id"],
             ["apartment.id"],
