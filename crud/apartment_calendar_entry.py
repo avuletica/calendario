@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import List
+
 from sqlalchemy.orm import Session
 
 from crud.base import CRUDBase
@@ -8,6 +11,23 @@ from schemas import ApartmentCalendarEntryCreate
 class CRUDApartmentCalendarEntry(
     CRUDBase[ApartmentCalendarEntry, ApartmentCalendarEntryCreate]
 ):
+    def get_multi_by_calendar_id(
+        self,
+        db: Session,
+        *,
+        apartment_calendar_ids: List[int],
+        datetime_from: datetime = None,
+        datetime_to: datetime = None
+    ) -> List[ApartmentCalendarEntry]:
+        query = db.query(self.model).filter(
+            ApartmentCalendarEntry.apartment_calendar_id.in_(apartment_calendar_ids)
+        )
+        if datetime_from:
+            query = query.filter(ApartmentCalendarEntry.start_datetime >= datetime_from)
+        if datetime_to:
+            query = query.filter(ApartmentCalendarEntry.end_datetime < datetime_to)
+        return query.all()
+
     def create(
         self, db: Session, *, obj_in: ApartmentCalendarEntryCreate
     ) -> ApartmentCalendarEntry:

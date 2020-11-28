@@ -12,8 +12,14 @@ from schemas import ApartmentCalendarCreate
 
 
 class CRUDApartmentCalendar(CRUDBase[ApartmentCalendar, ApartmentCalendarCreate]):
-    def get_by_id(self, db: Session, apartment_calendar_id: int) -> Optional[ApartmentCalendar]:
-        return db.query(self.model).filter(ApartmentCalendar.id == apartment_calendar_id).first()
+    def get_by_id(
+        self, db: Session, apartment_calendar_id: int
+    ) -> Optional[ApartmentCalendar]:
+        return (
+            db.query(self.model)
+            .filter(ApartmentCalendar.id == apartment_calendar_id)
+            .first()
+        )
 
     def get_by_apartment_id(
         self, db: Session, apartment_id: int

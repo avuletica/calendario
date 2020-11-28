@@ -1,6 +1,7 @@
 import io
+from datetime import datetime
 from http import HTTPStatus
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import (
     APIRouter,
@@ -46,7 +47,9 @@ def calendar_import_handler(db, current_user, calendar):
     calendar.pop("apartment_name", None)
     entries = calendar.pop("entries")
     apartment_calendar_in = ApartmentCalendarCreate(**calendar)
-    apartment_calendar = crud.apartment_calendar.create(db=db, obj_in=apartment_calendar_in)
+    apartment_calendar = crud.apartment_calendar.create(
+        db=db, obj_in=apartment_calendar_in
+    )
 
     for entry in entries:
         entry["apartment_calendar_id"] = apartment_calendar.id
@@ -86,9 +89,7 @@ async def calendar_import_from_url(
     current_user: models.User = Depends(deps.get_current_active_user),
     url: AnyHttpUrl,
 ) -> Any:
-    calendar_from_url = await crud.apartment_calendar.fetch_icalendar_from_url(
-        url
-    )
+    calendar_from_url = await crud.apartment_calendar.fetch_icalendar_from_url(url)
     calendar = crud.apartment_calendar.parse_icalendar(calendar_from_url)
     calendar["import_url"] = url
     calendar_import_handler(db, current_user, calendar)
@@ -134,3 +135,22 @@ async def calendar_export(
         "Content-Type": "text/calendar",
     }
     return StreamingResponse(output, headers=headers, media_type="text/calendar")
+
+
+@router.get("")
+def list_apartment_calendars(
+    *,
+    current_user: models.User = Depends(deps.get_current_active_user),
+    datetime_from: Optional[datetime] = None,
+    datetime_to: Optional[datetime] = None,
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    apartments = crud.apartment.get_multi_by_owner(db=db, owner_id=current_user.id)
+    calendar_ids = [apartment.calendar.id for apartment in apartments]
+    calendar_entries = crud.apartment_calendar_entry.get_multi_by_calendar_id(
+        db,
+        apartment_calendar_ids=calendar_ids,
+        datetime_from=datetime_from,
+        datetime_to=datetime_to,
+    )
+    return calendar_entries
