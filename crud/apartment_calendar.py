@@ -60,11 +60,11 @@ class CRUDApartmentCalendar(CRUDBase[ApartmentCalendar, ApartmentCalendarCreate]
                 data["summary"] = component.get("summary")
                 data["start_datetime"] = component.get("dtstart").dt
                 data["end_datetime"] = component.get("dtend").dt
-                if isinstance(data["start_datetime"], date):
+                if not isinstance(data["start_datetime"], datetime):
                     data["start_datetime"] = datetime.combine(
                         data["start_datetime"], datetime.min.time()
                     )
-                if isinstance(data["end_datetime"], date):
+                if not isinstance(data["end_datetime"], datetime):
                     data["end_datetime"] = datetime.combine(
                         data["end_datetime"], datetime.min.time()
                     )

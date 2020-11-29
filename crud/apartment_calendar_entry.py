@@ -28,6 +28,12 @@ class CRUDApartmentCalendarEntry(
             query = query.filter(ApartmentCalendarEntry.end_datetime < datetime_to)
         return query.all()
 
+    @staticmethod
+    def calculate_cleaning_schedule(apartment_calendar_entries):
+        cleaning_time_start = 11
+        cleaning_time_end = 15
+        pass
+
     def create(
         self, db: Session, *, obj_in: ApartmentCalendarEntryCreate
     ) -> ApartmentCalendarEntry:

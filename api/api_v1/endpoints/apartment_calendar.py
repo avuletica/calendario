@@ -146,7 +146,13 @@ def list_apartment_calendars(
     db: Session = Depends(deps.get_db),
 ) -> Any:
     apartments = crud.apartment.get_multi_by_owner(db=db, owner_id=current_user.id)
-    calendar_ids = [apartment.calendar.id for apartment in apartments]
+    if not apartments:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User does not own any apartments.",
+        )
+
+    calendar_ids = [apartment.calendar.id for apartment in apartments if apartment.calendar is not None]
     calendar_entries = crud.apartment_calendar_entry.get_multi_by_calendar_id(
         db,
         apartment_calendar_ids=calendar_ids,
