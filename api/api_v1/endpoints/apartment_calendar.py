@@ -176,7 +176,7 @@ def list_apartment_calendars(
                 this will result in most apartment cleaning per day.
             b) All availability_ranges that fall under the previous category will be removed for the next iteration
             c) Repeat process as long as there are common intervals.
-    4) If there is no common interval where apartments are unoccupied suggest the first available cleaning and that is:
+    4) If there is no common interval where apartments are unoccupied suggest the first available cleaning is:
         - same day if the guest leaves at or before 11 AM
         - next day if the guest leaves after 3 PM
     """
@@ -203,56 +203,13 @@ def list_apartment_calendars(
     )
 
     apartment_entries = {str(apartment.id): [] for apartment in apartments}
-    for entry in calendar_entries:
-        data = {
-            "start_datetime": entry.start_datetime,
-            "end_datetime": entry.end_datetime,
-        }
-        apartment_entries[str(entry.calendar.apartment_id)].append(data)
-
-    cleaning_schedule = {
-        apartment.name: {
-            "entries": apartment_entries[str(apartment.id)],
-            "next_cleaning_time": None,
-            "availability_range": [],
-        }
-        for apartment in apartments
-    }
-
-    for item in cleaning_schedule.values():
-        availability_ranges, next_cleaning_time = calculate_availability(
-            item["entries"]
-        )
-        item["next_cleaning_time"] = next_cleaning_time
-        item["availability_range"].extend(availability_ranges)
-        del item["entries"]
-
-    while any(item.get("availability_range") for item in cleaning_schedule.values()):
-        remaining_availability = []
-        for key, value in cleaning_schedule.items():
-            availability_range = value.get("availability_range")
-
-            if availability_range is None or len(availability_range) == 0:
-                continue
-
-            remaining_availability.append(
-                {
-                    "apartment_name": key,
-                    "availability_range": availability_range[0],
-                }
-            )
-
-        elimination = eliminate_overlaps(*remaining_availability)
-        for apartment in elimination["apartments"]:
-            cleaning_schedule[apartment]["next_cleaning_time"].append(
-                elimination["next_cleaning_time"]
-            )
-            cleaning_schedule[apartment]["availability_range"].pop()
-
-            if len(cleaning_schedule[apartment]["availability_range"]) == 0:
-                del cleaning_schedule[apartment]["availability_range"]
-
-    for item in cleaning_schedule.values():
-        item["next_cleaning_time"].sort()
+    apartment_entries = crud.apartment_calendar_entry.map_calendar_entries(
+        apartment_entries, calendar_entries
+    )
+    cleaning_schedule = crud.apartment.init_cleaning_schedule(
+        apartments, apartment_entries
+    )
+    cleaning_schedule = crud.apartment.calculate_availability(cleaning_schedule)
+    cleaning_schedule = crud.apartment.calculate_cleaning_schedule(cleaning_schedule)
 
     return cleaning_schedule

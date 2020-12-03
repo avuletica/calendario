@@ -42,5 +42,15 @@ class CRUDApartmentCalendarEntry(
         db.refresh(db_obj)
         return db_obj
 
+    def map_calendar_entries(self, apartment_entries, calendar_entries):
+        for entry in calendar_entries:
+            data = {
+                "start_datetime": entry.start_datetime,
+                "end_datetime": entry.end_datetime,
+            }
+            apartment_entries[str(entry.calendar.apartment_id)].append(data)
+
+        return apartment_entries
+
 
 apartment_calendar_entry = CRUDApartmentCalendarEntry(ApartmentCalendarEntry)

@@ -63,7 +63,7 @@ def eliminate_overlaps(*args) -> dict:
 
 def calculate_availability(apartment_entries: List[dict]) -> Tuple[list, list]:
     """
-        Calculate datetime ranges when apartments are unoccupied.
+    Calculate datetime ranges when apartments are unoccupied.
     """
     entries_to_pop = []
     next_cleaning_time = []
@@ -76,9 +76,7 @@ def calculate_availability(apartment_entries: List[dict]) -> Tuple[list, list]:
 
         # If next booking is at same day clean immediately
         if next_start_time.day == end_time.day:
-            next_cleaning_time.append(
-                next_start_time.replace(hour=11)
-            )
+            next_cleaning_time.append(next_start_time.replace(hour=11))
             entries_to_pop.append(index)
             continue
 
