@@ -18,7 +18,7 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "calendario"
 
-    POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER", "calendario_pg_db")
+    POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER", "localhost")
     POSTGRES_USER: str = os.getenv("POSTGRES_USER", "calendario_db_user")
     POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "calendario_db_password")
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "calendario_db")
@@ -27,31 +27,9 @@ class Settings(BaseSettings):
         f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}/{POSTGRES_DB}",
     )
 
-    SMTP_TLS: bool = True
-    SMTP_PORT: Optional[int] = None
-    SMTP_HOST: Optional[str] = None
-    SMTP_USER: Optional[str] = None
-    SMTP_PASSWORD: Optional[str] = None
-    EMAILS_FROM_EMAIL: Optional[EmailStr] = None
-    EMAILS_FROM_NAME: Optional[str] = None
-
-    @validator("EMAILS_FROM_NAME")
-    def get_project_name(cls, v: Optional[str], values: Dict[str, Any]) -> str:
-        if not v:
-            return values["PROJECT_NAME"]
-        return v
-
-    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
-    EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
-    EMAILS_ENABLED: bool = False
-
-    @validator("EMAILS_ENABLED", pre=True)
-    def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
-        return bool(
-            values.get("SMTP_HOST")
-            and values.get("SMTP_PORT")
-            and values.get("EMAILS_FROM_EMAIL")
-        )
+    # Here only because of tests and faster demo.
+    FIRST_USER_EMAIL: EmailStr = "john@doe.com"
+    FIRST_USER_PASSWORD: str = "password"
 
     class Config:
         case_sensitive = True

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 import crud
 import schemas
+from config import settings
 
 
 def init_db(db: Session) -> None:
@@ -10,11 +11,11 @@ def init_db(db: Session) -> None:
     # the tables un-commenting the next line
     # Base.metadata.create_all(bind=engine)
 
-    user = crud.user.get_by_email(db, email="john@doe.com")
+    user = crud.user.get_by_email(db, email=settings.FIRST_USER_EMAIL)
     if not user:
         user_in = schemas.UserCreate(
-            email="john@doe.com",
-            password="password",
+            email=settings.FIRST_USER_EMAIL,
+            password=settings.FIRST_USER_PASSWORD,
         )
         user = crud.user.create(db, obj_in=user_in)
 

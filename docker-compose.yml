@@ -27,4 +27,5 @@ services:
     stop_signal: SIGINT
     environment:
       DEBUG: "1"
+      POSTGRES_SERVER: "calendario_pg_db"
     command: ["./wait-for-postgres.sh", "db", "python", "run.py"]

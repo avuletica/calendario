@@ -6,7 +6,9 @@ icalendar
 passlib
 psycopg2
 pydantic[email]
+pytest
 python-jose[cryptography]
 python-multipart
+requests
 sqlalchemy
 uvicorn
