@@ -1,8 +1,7 @@
 import io
-from copy import deepcopy
 from datetime import datetime
 from http import HTTPStatus
-from typing import Any, Optional
+from typing import Any
 
 from fastapi import (
     APIRouter,
@@ -20,11 +19,6 @@ from starlette.responses import StreamingResponse
 import crud
 import models
 from api import deps
-from api.utils.utils import (
-    calculate_availability,
-    eliminate_overlaps,
-    datetime_range,
-)
 from schemas import ApartmentCalendarCreate, ApartmentCalendarEntryCreate
 
 router = APIRouter()
@@ -150,37 +144,7 @@ def list_apartment_calendars(
     current_user: models.User = Depends(deps.get_current_active_user),
     db: Session = Depends(deps.get_db),
 ) -> Any:
-    """
-    Cleaning time is scheduled from 11:00 AM to 15:00 PM
-
-    Algorithm flow:
-
-       --------------|-------------|-------------|
-    A1 [date_range_1, date_range_2, date_range_3]
-       --------------|-------------|
-    A2 [date_range_1, date_range_2]
-       --------------|-------------|-------------|
-    A3 [date_range_1, date_range_2, date_range_3]
-       --------------|-------------|-------------|-------------|
-    A4 [date_range_1, date_range_2, date_range_3, date_range_4]
-
-    For given datetime range
-
-    1) Find intervals when the apartment is unoccupied
-        - This is done by combining apartment first end_datetime (end of stay) with apartments
-        next start_time (next guest coming) and generating datetime range
-    2) If there is a booking on the same day guest leaves that day will be optimal cleaning time.
-    3) If we find common intervals where apartments are unoccupied => result in group cleaning
-        - this is done by checking if there is an intersection in the available days of each apartment.
-            a) If there is an intersection => find availability_range with the most number of intersections,
-                this will result in most apartment cleaning per day.
-            b) All availability_ranges that fall under the previous category will be removed for the next iteration
-            c) Repeat process as long as there are common intervals.
-    4) If there is no common interval where apartments are unoccupied suggest the first available cleaning is:
-        - same day if the guest leaves at or before 11 AM
-        - next day if the guest leaves after 3 PM
-    """
-
+    # Explained: https://github.com/avuletica/calendario#cleaning-algorithm
     apartments = crud.apartment.get_multi_by_owner(db=db, owner_id=current_user.id)
 
     if not apartments:
