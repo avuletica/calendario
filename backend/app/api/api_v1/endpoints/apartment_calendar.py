@@ -3,6 +3,9 @@ from datetime import datetime
 from http import HTTPStatus
 from typing import Any
 
+import crud
+import models
+from api import deps
 from fastapi import (
     APIRouter,
     UploadFile,
@@ -13,13 +16,9 @@ from fastapi import (
     status,
 )
 from pydantic import AnyHttpUrl
+from schemas import ApartmentCalendarCreate, ApartmentCalendarEntryCreate
 from sqlalchemy.orm import Session
 from starlette.responses import StreamingResponse
-
-import crud
-import models
-from api import deps
-from schemas import ApartmentCalendarCreate, ApartmentCalendarEntryCreate
 
 router = APIRouter()
 

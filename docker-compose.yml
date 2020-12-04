@@ -14,10 +14,10 @@ services:
   calendario:
     container_name: calendario
     build:
-      context: .
-      dockerfile: calendario.dockerfile
+      context: ./backend
+      dockerfile: dockerfile
     volumes:
-      - $PWD:/app
+      - $PWD/backend/app:/app
 #    env_file:
 #      - .env
     ports:
@@ -28,4 +28,4 @@ services:
     environment:
       DEBUG: "1"
       POSTGRES_SERVER: "calendario_pg_db"
-    command: ["./wait-for-postgres.sh", "db", "python", "run.py"]
+    command: ["python", "run.py"]
