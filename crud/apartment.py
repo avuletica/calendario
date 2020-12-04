@@ -44,7 +44,7 @@ class CRUDApartment(CRUDBase[Apartment, ApartmentCreate]):
             item.name: {
                 "entries": apartment_entries[str(item.id)],
                 "next_cleaning_time": None,
-                "availability_range": [],
+                "availability_range": (),
             }
             for item in apartments
         }
@@ -56,7 +56,7 @@ class CRUDApartment(CRUDBase[Apartment, ApartmentCreate]):
                 item["entries"]
             )
             item["next_cleaning_time"] = next_cleaning_time
-            item["availability_range"].extend(availability_ranges)
+            item["availability_range"] += availability_ranges
             del item["entries"]
 
         return cleaning_schedule

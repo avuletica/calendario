@@ -3,7 +3,7 @@ from datetime import timedelta
 from typing import List, Generator, Tuple, Any
 
 
-def datetime_range(start=None, end=None) -> Generator:
+def datetime_range(start, end) -> Generator:
     span = end - start
     for i in range(span.days + 1):
         yield start + timedelta(days=i)
@@ -61,30 +61,27 @@ def eliminate_overlaps(*args) -> dict:
     return ret_value
 
 
-def calculate_availability(apartment_entries: List[dict]) -> Tuple[list, list]:
+def calculate_availability(apartment_entries: List[dict]) -> Tuple[tuple, tuple]:
     """
     Calculate datetime ranges when apartments are unoccupied.
     """
     entries_to_pop = []
-    next_cleaning_time = []
-    available_apartment_dates = []
+    next_cleaning_time = ()
+    available_apartment_dates = ()
     for index, calendar_entry in enumerate(apartment_entries):
         if index + 1 == len(apartment_entries):
             break
         end_time = apartment_entries[index]["end_datetime"]
         next_start_time = apartment_entries[index + 1]["start_datetime"]
 
-        # If next booking is at same day clean immediately
-        if next_start_time.day == end_time.day:
-            next_cleaning_time.append(next_start_time.replace(hour=11))
-            entries_to_pop.append(index)
-            continue
+        # # If next booking is at same day clean immediately
+        # if next_start_time.day == end_time.day:
+        #     next_cleaning_time.append(next_start_time.replace(hour=11))
+        #     entries_to_pop.append(index)
+        #     continue
 
-        datetime_range_ = list(datetime_range(end_time, next_start_time))
-        available_apartment_dates.append(datetime_range_)
+        available_apartment_dates += tuple(datetime_range(end_time, next_start_time))
+    # for item in entries_to_pop:
+    #     apartment_entries.pop(item)
 
-    for item in entries_to_pop:
-        apartment_entries.pop(item)
-
-    available_apartment_dates.sort()
     return available_apartment_dates, next_cleaning_time

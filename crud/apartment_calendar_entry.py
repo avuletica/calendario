@@ -45,8 +45,8 @@ class CRUDApartmentCalendarEntry(
     def map_calendar_entries(self, apartment_entries, calendar_entries):
         for entry in calendar_entries:
             data = {
-                "start_datetime": entry.start_datetime,
-                "end_datetime": entry.end_datetime,
+                "start_datetime": entry.start_datetime.date(),
+                "end_datetime": entry.end_datetime.date(),
             }
             apartment_entries[str(entry.calendar.apartment_id)].append(data)
 

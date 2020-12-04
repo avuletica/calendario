@@ -2,7 +2,7 @@ import io
 from datetime import datetime
 from http import HTTPStatus
 from typing import Any
-
+from itertools import combinations
 from fastapi import (
     APIRouter,
     UploadFile,
@@ -59,9 +59,9 @@ def calendar_import_handler(db, current_user, calendar):
 
 @router.post("/import", status_code=HTTPStatus.NO_CONTENT)
 async def calendar_import(
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
-    file: UploadFile = File(...),
+        db: Session = Depends(deps.get_db),
+        current_user: models.User = Depends(deps.get_current_active_user),
+        file: UploadFile = File(...),
 ) -> Any:
     file_ = await file.read()
     calendar = crud.apartment_calendar.parse_icalendar(file_)
@@ -84,10 +84,10 @@ async def calendar_import(
     },
 )
 async def calendar_import_from_url(
-    *,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
-    url: AnyHttpUrl,
+        *,
+        db: Session = Depends(deps.get_db),
+        current_user: models.User = Depends(deps.get_current_active_user),
+        url: AnyHttpUrl,
 ) -> Any:
     calendar_from_url = await crud.apartment_calendar.fetch_icalendar_from_url(url)
     calendar = crud.apartment_calendar.parse_icalendar(calendar_from_url)
@@ -111,9 +111,9 @@ async def calendar_import_from_url(
     },
 )
 async def calendar_export(
-    calendar_id: int,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
+        calendar_id: int,
+        db: Session = Depends(deps.get_db),
+        current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     calendar = crud.apartment_calendar.get_by_id(db, calendar_id)
 
@@ -139,10 +139,10 @@ async def calendar_export(
 
 @router.get("")
 def list_apartment_calendars(
-    datetime_from: datetime,
-    datetime_to: datetime,
-    current_user: models.User = Depends(deps.get_current_active_user),
-    db: Session = Depends(deps.get_db),
+        datetime_from: datetime,
+        datetime_to: datetime,
+        current_user: models.User = Depends(deps.get_current_active_user),
+        db: Session = Depends(deps.get_db),
 ) -> Any:
     # Explained: https://github.com/avuletica/calendario#cleaning-algorithm
     apartments = crud.apartment.get_multi_by_owner(db=db, owner_id=current_user.id)
@@ -174,6 +174,18 @@ def list_apartment_calendars(
         apartments, apartment_entries
     )
     cleaning_schedule = crud.apartment.calculate_availability(cleaning_schedule)
-    cleaning_schedule = crud.apartment.calculate_cleaning_schedule(cleaning_schedule)
+    # cleaning_schedule = crud.apartment.calculate_cleaning_schedule(cleaning_schedule)
+
+    sets = []
+
+    for key, value in cleaning_schedule.items():
+        sets.append(set(value["availability_range"]))
+
+    for combo_size in range(2, len(sets)):
+        for combo in combinations(range(len(sets)), combo_size):
+            intersection = sets[combo[0]]
+            for i in combo[1:]:
+                intersection = intersection & sets[i]
+            print(",".join(f"Set{i + 1}" for i in combo), "=", intersection)
 
     return cleaning_schedule
