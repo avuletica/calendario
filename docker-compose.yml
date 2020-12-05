@@ -36,7 +36,7 @@ services:
       context: ./frontend
       dockerfile: frontend.dockerfile
     ports:
-      - "4201:4201"
+      - "4200:4200"
     depends_on:
       - calendario_be
     volumes:

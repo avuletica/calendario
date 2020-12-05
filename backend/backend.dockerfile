@@ -13,3 +13,4 @@ RUN apk add --no-cache postgresql-libs && \
     apk --purge del .build-deps
 
 ENV PYTHONPATH=/app
+EXPOSE 8080

@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "http://calendario_be:8080",
+    "secure": false
+  }
+}

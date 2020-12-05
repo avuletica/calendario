@@ -7,3 +7,4 @@ __pycache__/
 .pytestcache
 .tox
 .venv
+node_modules

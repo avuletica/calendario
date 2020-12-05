@@ -8,11 +8,12 @@ application = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
+application.include_router(api_router, prefix=settings.API_V1_STR)
+
 application.add_middleware(
     CORSMiddleware,
+    allow_credentials=True,
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-application.include_router(api_router, prefix=settings.API_V1_STR)
