@@ -21,11 +21,25 @@ export class RegistrationComponent implements OnInit {
 
     onSubmit(data): void {
         this._http.post<any>(this.rootURL + '/api/v1/registration', data).subscribe(resp => {
-                this._snackBar.open('Registration complete!', 'OK', {duration: 2000});
-                this._router.navigateByUrl('/login');
+                this.login(data);
             },
             error => {
                 this._snackBar.open('Bad request', 'OK', {duration: 2000});
+            }
+        );
+    }
+
+    login(data): void {
+        const formData: any = new FormData();
+        formData.append('username', data.email);
+        formData.append('password', data.password);
+        this._http.post<any>(this.rootURL + '/api/v1/login/access-token', formData).subscribe(resp => {
+                localStorage.setItem('auth', resp.access_token);
+                this._router.navigateByUrl('/home');
+                this._snackBar.open('Welcome ' + data.email, 'OK', {duration: 2000});
+            },
+            error => {
+                this._snackBar.open(error.error.detail, 'OK', {duration: 2000});
             }
         );
     }

@@ -19,11 +19,6 @@ export class LoginComponent {
 
 
     onSubmit(data): void {
-        if (!data.username || !data.password) {
-            this._snackBar.open('Unauthorized', 'OK', {duration: 2000});
-            return;
-        }
-
         const formData: any = new FormData();
         formData.append('username', data.username);
         formData.append('password', data.password);
