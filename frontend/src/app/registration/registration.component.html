@@ -1,7 +1,8 @@
-<form #userlogin="ngForm" class="example-form center" (ngSubmit)="onSubmit(userlogin.value)">
+<form #userRegistration="ngForm" class="example-form center" (keyup.enter)="onSubmit(userRegistration.value)"
+      (ngSubmit)="onSubmit(userRegistration.value)">
     <mat-form-field class="example-full-width">
         <mat-label>Email</mat-label>
-        <input matInput type="email" name="email" ngModel placeholder="Ex. pat@example.com" >
+        <input matInput type="email" name="email" ngModel placeholder="Ex. pat@example.com">
     </mat-form-field>
     <mat-form-field class="example-full-width" style="margin-top: 20px; margin-bottom: 20px">
         <mat-label>Enter your password</mat-label>
