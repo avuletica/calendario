@@ -24,7 +24,7 @@ async def calendar_export() -> Any:
     ics = """
         BEGIN:VCALENDAR
         VERSION:2.0
-        PRODID:apartment_2
+        PRODID:apartment_4
         CALSCALE:GREGORIAN
         METHOD:PUBLISH
         BEGIN:VEVENT

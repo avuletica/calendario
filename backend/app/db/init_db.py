@@ -51,3 +51,14 @@ def init_db(db: Session) -> None:
             name=apartment_name,
         )
         crud.apartment.create(db, obj_in=apartment_3)
+
+    apartment_name = "apartment_4"
+    apartment_4 = crud.apartment.get_by_name(
+        db, owner_id=user.id, apartment_name=apartment_name
+    )
+    if not apartment_4:
+        apartment_4 = schemas.ApartmentCreate(
+            owner_id=user.id,
+            name=apartment_name,
+        )
+        crud.apartment.create(db, obj_in=apartment_4)

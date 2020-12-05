@@ -21,7 +21,9 @@ For first time setup we must run migrations (we can also add initial data for te
   $ alembic upgrade head
   $ python init_data.py
 ```
+BE: http://localhost:8080/docs
 
+FE (work in progress): http://localhost:4200/login
 ### Cleaning algorithm
 
 Cleaning time is scheduled from 11:00 AM to 15:00 PM

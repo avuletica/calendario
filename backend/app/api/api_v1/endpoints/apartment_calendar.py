@@ -68,7 +68,7 @@ async def calendar_import(
     return Response(status_code=HTTPStatus.NO_CONTENT)
 
 
-@router.get(
+@router.post(
     "/import-from-url",
     responses={
         204: {
