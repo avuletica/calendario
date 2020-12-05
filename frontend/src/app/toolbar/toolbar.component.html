@@ -1,12 +1,16 @@
 <mat-toolbar color="primary">
     <a href="/home">Calendario</a>
     <span class="example-spacer"></span>
-    <a style="margin-right: 15px" href="/login">
+    <a *ngIf=!loggedIn style="margin-right: 15px" href="/login">
         Login
     </a>
 
-    <a href="/registration">
+    <a *ngIf=!loggedIn href="/registration">
         Registration
+    </a>
+
+    <a *ngIf=loggedIn href="/login" (click)="onLogout()">
+        Logout
     </a>
 </mat-toolbar>
 
