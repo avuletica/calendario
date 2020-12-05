@@ -15,33 +15,34 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {HttpClientModule} from '@angular/common/http';
 import {HomeComponent} from './home/home.component';
 import {AppRoutingModule} from './app-routing.module';
-import { RegistrationComponent } from './registration/registration.component';
+import {RegistrationComponent} from './registration/registration.component';
 import {MatTableModule} from '@angular/material/table';
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    ToolbarComponent,
-    LoginComponent,
-    HomeComponent,
-    RegistrationComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatSnackBarModule,
-    HttpClientModule,
-    AppRoutingModule,
-    MatTableModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        ToolbarComponent,
+        LoginComponent,
+        HomeComponent,
+        RegistrationComponent
+    ],
+    imports: [
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        FormsModule,
+        HttpClientModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatSnackBarModule,
+        MatTableModule,
+        MatToolbarModule,
+        ReactiveFormsModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }
