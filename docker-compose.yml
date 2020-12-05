@@ -11,11 +11,11 @@ services:
     ports:
     - "5432:5432"
 
-  calendario:
-    container_name: calendario
+  calendario_be:
+    container_name: calendario_be
     build:
       context: ./backend
-      dockerfile: dockerfile
+      dockerfile: backend.dockerfile
     volumes:
       - $PWD/backend/app:/app
 #    env_file:
@@ -29,3 +29,15 @@ services:
       DEBUG: "1"
       POSTGRES_SERVER: "calendario_pg_db"
     command: ["python", "run.py"]
+
+  calendario_fe:
+    container_name: calendario_fe
+    build:
+      context: ./frontend
+      dockerfile: frontend.dockerfile
+    ports:
+      - "4201:4201"
+    depends_on:
+      - calendario_be
+    volumes:
+      - $PWD/frontend:/app

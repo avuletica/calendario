@@ -17,7 +17,7 @@ Task: parse, store .ics files and make an algorithm to calculate optimal cleanin
 For first time setup we must run migrations (we can also add initial data for testing):
 
 ```
-  $ docker exec -it calendario sh
+  $ docker exec -it calendario_be sh
   $ alembic upgrade head
   $ python init_data.py
 ```
