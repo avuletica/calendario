@@ -58,6 +58,7 @@ For given datetime range
 Running all test cases with pytest:
 
 ```
+    $ docker exec -it calendario_be sh
     $ pytest
 ```
 
@@ -68,7 +69,7 @@ To get fresh docker container (no volume data)
 
 
 ### Database diagram
-<img src="https://github.com/avuletica/calendario/blob/master/static/calendario_db_diagram.png" width="1000" height="300">
+<img src="https://github.com/avuletica/calendario/blob/master/backend/app/static/calendario_db_diagram.png" width="1000" height="300">
 
 #### Helpful alembic commands
 generate a new revision
